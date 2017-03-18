@@ -5,11 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { SpinWheelComponent } from './spin-wheel/spin-wheel.component';
+import { CameraComponent } from './camera/camera.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SpinWheelComponent
+    SpinWheelComponent,
+    CameraComponent
   ],
   imports: [
     BrowserModule,

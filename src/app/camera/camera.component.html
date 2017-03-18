@@ -1,0 +1,12 @@
+<p>
+  camera component works!
+</p>
+<div class="camera">
+  <video #video id="video">Video stream not available.</video>
+  <button (click)="takePhotoClicked()" id="startbutton">Take photo</button>
+</div>
+<canvas style="display: none" #canvas id="canvas">
+</canvas>
+<div class="output">
+  <img #photo id="photo" alt="The screen capture will appear in this box.">
+</div>

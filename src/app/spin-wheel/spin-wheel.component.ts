@@ -1,11 +1,11 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, ViewChild,OnInit, AfterViewInit} from '@angular/core';
 
 @Component({
   selector: 'spin-wheel',
   templateUrl: './spin-wheel.component.html',
   styleUrls: ['./spin-wheel.component.css']
 })
-export class SpinWheelComponent {
+export class SpinWheelComponent implements OnInit,AfterViewInit {
 
   @ViewChild('canvas') canvasRef: ElementRef;
   @Input() width: number = 300;
