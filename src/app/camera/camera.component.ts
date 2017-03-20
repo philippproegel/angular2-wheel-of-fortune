@@ -76,6 +76,8 @@ export class CameraComponent implements OnInit,AfterViewInit {
       context.drawImage(this.video, 0, 0, this.photoWidth, this.photoHeight);
 
       var data = this.canvas.toDataURL('image/png');
+      var img = new Image();
+      img.setAttribute('src', data);
       this.photo.setAttribute('src', data);
     } else {
       this.clearPhoto();
