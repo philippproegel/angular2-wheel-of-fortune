@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'my-camera',
@@ -12,6 +12,8 @@ export class CameraComponent implements OnInit,AfterViewInit {
   @ViewChild('photo') photoRef: ElementRef;
 
   @Input() photoWidth: number = 300;
+
+  @Output() onNewPhoto = new EventEmitter<any>();
 
   private photo;
   private canvas;
@@ -76,6 +78,7 @@ export class CameraComponent implements OnInit,AfterViewInit {
       context.drawImage(this.video, 0, 0, this.photoWidth, this.photoHeight);
 
       var data = this.canvas.toDataURL('image/png');
+      this.onNewPhoto.emit(data);
       var img = new Image();
       img.setAttribute('src', data);
       this.photo.setAttribute('src', data);

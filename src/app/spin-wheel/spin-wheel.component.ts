@@ -14,13 +14,14 @@ export class SpinWheelComponent implements OnInit,AfterViewInit {
   @Input() sliceColors: string[] = ['#e7e5e5', '#c3bebe', '#e7e5e5', '#c3bebe', '#e7e5e5', '#c3bebe', '#e7e5e5', '#c3bebe'];
   private degreeOfSlice: number;
   private deg: number;
-  private rotationSpeed: number = 5;
   private spinTimer: any;
   private spinTimerSubscription: any;
   private spinTime: number = 0; //in ms
 
   private canvas: any;
   private simStep: number = 33;
+
+  private photoArray: any[] = [];
 
   constructor() {
   }
@@ -36,6 +37,14 @@ export class SpinWheelComponent implements OnInit,AfterViewInit {
     this.canvas.height = this.height;
     this.degreeOfSlice = 360 / this.sliceColors.length;
     this.deg = 0;
+    this.draw();
+  }
+
+  onNewPhoto(photoData: any){
+    console.log('received photo data');
+    var img = new Image();
+    img.setAttribute('src', photoData);
+    this.photoArray.push(img);
     this.draw();
   }
 
@@ -67,7 +76,7 @@ export class SpinWheelComponent implements OnInit,AfterViewInit {
     return deg * Math.PI / 180;
   }
 
-  drawImage(context, deg, text) {
+  drawText(context, deg, text) {
     let center = this.width / 2;
     context.save();
     context.translate(center, center);
@@ -76,6 +85,16 @@ export class SpinWheelComponent implements OnInit,AfterViewInit {
     context.fillStyle = "#fff";
     context.font = 'bold 30px sans-serif';
     context.fillText(text, 130, 10);
+    context.restore();
+  }
+
+  drawImage(context, deg , imageData){
+    console.log('drawImage');
+    let center = this.width / 2;
+    context.save();
+    context.translate(center, center);
+    context.rotate(this.deg2rad(deg));
+    context.drawImage(imageData, 70, -30, 70, 70);
     context.restore();
   }
 
@@ -88,23 +107,35 @@ export class SpinWheelComponent implements OnInit,AfterViewInit {
     context.fill();
   }
 
+  drawSelectionMarker(context){
+    context.beginPath();
+    context.fillStyle = '#0000ff';
+    context.moveTo(140,0);
+    context.lineTo(160,0);
+    context.lineTo(150,15);
+    context.fill();
+  }
+
   rotateWheel() {
-    this.deg += this.rotationSpeed;
+    this.deg += this.spinTime / 1000;
     this.draw();
   }
 
   draw() {
     if (this.canvas.getContext) {
       const c = this.canvas.getContext('2d');
-
+      this.drawSelectionMarker(c);
       //fill in the background
       c.fillStyle = "#e70a0a";
       c.fillRect(0, 0, this.width, this.height);
       for (let i = 0; i < this.sliceColors.length; i++) {
         this.drawSlice(c, this.width / 2, this.deg, this.sliceColors[i]);
-        this.drawImage(c, this.deg + this.degreeOfSlice / 2, 'Philipp');
+        if(this.photoArray[i]){
+          this.drawImage(c,this.deg + this.degreeOfSlice / 2,this.photoArray[i]);
+        }
         this.deg += this.degreeOfSlice;
       }
+      this.drawSelectionMarker(c);
     }
   }
 
